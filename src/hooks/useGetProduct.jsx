@@ -1,6 +1,6 @@
 import {onMounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import {getProduct} from "../api/productApi.jsx";
+import {deleteProduct, getProduct, putProduct} from "../api/productApi.jsx";
 
 export const useProductView = () => {
 
@@ -17,6 +17,8 @@ export const useProductView = () => {
         imageList:[]
     })
 
+    const router = useRouter()
+
     onMounted(() => {
 
         console.log(`Product View Component Mounted ${pno}`)
@@ -24,10 +26,13 @@ export const useProductView = () => {
         getProduct(pno).then(data => {
             console.log(data)
             product.value = data
+        }).catch(err => {
+            console.log(err)
+            router.push("/product/list")
         })
     })
 
-    const router = useRouter()
+
 
     const handleClickList = () => {
         console.log("handleClickList")
@@ -39,9 +44,35 @@ export const useProductView = () => {
         router.push({path: `/product/modify/${pno}`, query: route.query})
     }
 
+
+    const handleClickDelete = (callback) => {
+        console.log("handleClickDelete")
+        deleteProduct(pno).then(serverResult => {
+            console.log(serverResult)
+            callback(route, router)
+        })
+    }
+
+    const handleModifyCall = (callback) => {
+
+        console.log("handleModifyCall")
+
+        putProduct(product.value).then(serverResult => {
+            console.log(serverResult)
+            callback(route, router)
+        })
+
+
+    }
+
+
+
+
     return {
         product,
         handleClickList,
-        handleClickModify
+        handleClickModify,
+        handleClickDelete,
+        handleModifyCall
     }
 }

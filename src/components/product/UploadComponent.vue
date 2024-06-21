@@ -31,6 +31,12 @@ const handleClickUpload = (e) => {
 
       inputTag.value = ''
 
+    }).catch(err => {
+      console.log(err)
+
+      const msg = err.response.data.message || err.response.data.error
+
+      alert('UPLOAD ERROR:'+ msg)
     })
   }
 
