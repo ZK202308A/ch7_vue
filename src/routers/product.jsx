@@ -8,6 +8,9 @@ const productRouter = {
         {path: '', redirect: '/product/list'},
         {path: 'list', component: () => import('../pages/product/ListPage.vue'),},
         {path: 'register', component: () => import('../pages/product/RegisterPage.vue'),},
+        {path: 'view/:pno', component: () => import('../pages/product/ViewPage.vue'),},
+        {path: 'modify/:pno', component: () => import('../pages/product/ModifyPage.vue'),},
+
     ],
     beforeEnter: (to, from, next) => {
         console.log("check login with cookie")
@@ -17,6 +20,7 @@ const productRouter = {
         if(savedMid()){
             return next()
         }else {
+
             return next('/member/login')
         }
     }

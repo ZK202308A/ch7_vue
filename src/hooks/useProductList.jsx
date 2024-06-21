@@ -1,4 +1,4 @@
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {getProducts} from "../api/productApi.jsx";
 import {useRoute, useRouter} from "vue-router";
 
@@ -49,7 +49,7 @@ export const useProductList = () => {
 
     }
 
-    const handleClickRead = (mno) => {
+    const handleClickView = (mno) => {
         console.log("handleClickRead", mno)
         moveRouter.push({
             path: `/product/view/${mno}`,
@@ -57,7 +57,17 @@ export const useProductList = () => {
         })
     }
 
-    return {refData, getData, pageNums, handleClickPage, handleClickRead}
+    watch(
+        () => route.query,
+        (newVal, oldVal) => {
+            console.log("watch", newVal, oldVal)
+            getData()
+        },
+        {deep: true}
+    )
+
+
+    return {refData, getData, pageNums, handleClickPage, handleClickView}
 }
 
 export default useProductList
